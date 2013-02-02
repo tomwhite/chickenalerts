@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 
 public class ChickenAlertReceiver extends BroadcastReceiver {
 	@Override
@@ -18,6 +19,9 @@ public class ChickenAlertReceiver extends BroadcastReceiver {
 		NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.notify(0, notification);
+		
+		MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.cluck);
+		mediaPlayer.start(); // no need to call prepare(); create() does that for you
 	}
 
 }
