@@ -4,12 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/ok"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="startAlert"
-        android:text="Start Alerts" >
-    </Button>
-
+    <Switch android:text="Alerts"
+                android:checked="false"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dip"
+                android:onClick="onToggleClicked"/>
 </LinearLayout> 
