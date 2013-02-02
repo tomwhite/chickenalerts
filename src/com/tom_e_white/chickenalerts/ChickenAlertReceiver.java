@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 
 public class ChickenAlertReceiver extends BroadcastReceiver {
 	@Override
@@ -21,7 +22,13 @@ public class ChickenAlertReceiver extends BroadcastReceiver {
 		notificationManager.notify(0, notification);
 		
 		MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.cluck);
-		mediaPlayer.start(); // no need to call prepare(); create() does that for you
+		mediaPlayer.start();
+		mediaPlayer.setOnCompletionListener(new OnCompletionListener() {
+	        @Override
+	        public void onCompletion(MediaPlayer mp) {
+	            mp.release();                
+	        }
+	    });
 	}
 
 }
