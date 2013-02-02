@@ -1,5 +1,8 @@
 package com.tom_e_white.chickenalerts;
 
+import java.text.DateFormat;
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -28,11 +31,16 @@ public class MainActivity extends Activity {
 		Intent intent = new Intent(this, ChickenAlertReceiver.class);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(
 				this.getApplicationContext(), 234324243, intent, 0);
+		Calendar now = Calendar.getInstance();
+		AlertTimeCalculator calculator = new AlertTimeCalculator();
+		Calendar nextAlert = calculator.calculateNextAlert(now);
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP,
-				System.currentTimeMillis() + 5000, pendingIntent);
-		Toast.makeText(this, "Chicken Alarm set for 5 seconds",
+		alarmManager.set(AlarmManager.RTC_WAKEUP, nextAlert.getTimeInMillis(), pendingIntent);
+		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
+		boolean today = now.get(Calendar.DATE) == nextAlert.get(Calendar.DATE);
+		Toast.makeText(this, "Next Chicken Alert is at " + timeFormat.format(nextAlert.getTime()) + (today ? "" : " tomorrow"),
 				Toast.LENGTH_LONG).show();
 	}
+	
 
 }
