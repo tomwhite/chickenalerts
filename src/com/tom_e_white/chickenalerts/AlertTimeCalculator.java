@@ -1,7 +1,6 @@
 package com.tom_e_white.chickenalerts;
 
 import java.util.Calendar;
-import java.util.TimeZone;
 
 import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
 import com.luckycatlabs.sunrisesunset.dto.Location;
@@ -12,7 +11,7 @@ public class AlertTimeCalculator {
 	private int offsetInMinutes = 30;
 
 	public Calendar calculateNextAlert(Calendar cal) {
-		SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location, TimeZone.getDefault());
+		SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location, cal.getTimeZone());
 		Calendar alertTime = calculator.getOfficialSunsetCalendarForDate(cal);
 		alertTime.add(Calendar.MINUTE, offsetInMinutes);
 		if (alertTime.before(cal)) {
