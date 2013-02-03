@@ -3,7 +3,6 @@
 
     <string name="app_name">Chicken Alerts</string>
     <string name="menu_settings">Settings</string>
-    <string name="alerts_enabled">Alerts</string>
     <string name="send_test_alert">Send a test alert</string>
     <string name="notification_title">Chicken Alert</string>
     <string name="notification_text">Have you put the chickens to bed?</string>

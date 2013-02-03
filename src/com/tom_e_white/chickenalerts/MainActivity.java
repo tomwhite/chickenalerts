@@ -10,8 +10,8 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Switch;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
 
@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
 	}
 	
 	public void onToggleClicked(View view) {
-	    boolean on = ((Switch) view).isChecked();
+	    boolean on = ((ToggleButton) view).isChecked();
 	    if (on) {
 	    	enableAlerts();
 	    } else {
