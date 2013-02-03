@@ -10,6 +10,7 @@ import android.net.Uri;
 public class AlertReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		// Issue the notification
 		Uri sound = Uri.parse("android.resource://" + context.getPackageName()
 				+ "/" + R.raw.cluck);
 		Notification notification = new Notification.Builder(context)

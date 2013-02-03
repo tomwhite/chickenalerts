@@ -21,6 +21,7 @@ public class AlertScheduler {
 		Calendar nextAlert = calculator.calculateNextAlert(cal);
 		AlarmManager alarmManager =
 				(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		// Don't wake device if asleep - wait until it is next turned on
 		alarmManager.set(AlarmManager.RTC, nextAlert.getTimeInMillis(), pendingIntent);
 		return nextAlert;
 	}

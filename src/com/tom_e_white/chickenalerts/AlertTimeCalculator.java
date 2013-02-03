@@ -20,6 +20,7 @@ public class AlertTimeCalculator {
 				cal.getTimeZone());
 		Calendar alertTime = calculator.getOfficialSunsetCalendarForDate(cal);
 		alertTime.add(Calendar.MINUTE, offsetInMinutes);
+		// advance a day if alert time has already passed for today
 		if (!alertTime.after(cal)) {
 			Calendar calCopy = Calendar.getInstance(cal.getTimeZone());
 			calCopy.setTime(cal.getTime());
