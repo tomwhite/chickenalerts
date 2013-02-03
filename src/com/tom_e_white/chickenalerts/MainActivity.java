@@ -6,7 +6,10 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,6 +23,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		// TODO: get state from prefs and populate controls
 	}
 
 	@Override
@@ -40,14 +45,15 @@ public class MainActivity extends Activity {
 
 	private void enableAlerts() {
 		Log.i(getClass().getSimpleName(), "Enabling alerts");
-		Intent intent = new Intent(this, ChickenAlertReceiver.class);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(
-				this.getApplicationContext(), 0, intent, 0);
+		SharedPreferences prefs = getSharedPreferences("com.tom_e_white.chickenalerts", Context.MODE_PRIVATE);
+		Editor editor = prefs.edit();
+		editor.putBoolean("enabled", true);
+		editor.commit();
+		
 		Calendar now = Calendar.getInstance();
-		AlertTimeCalculator calculator = new AlertTimeCalculator();
-		Calendar nextAlert = calculator.calculateNextAlert(now);
-		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.set(AlarmManager.RTC_WAKEUP, nextAlert.getTimeInMillis(), pendingIntent);
+		AlertScheduler scheduler = new AlertScheduler();
+		Calendar nextAlert = scheduler.scheduleNextAlert(getApplicationContext(), now);
+		
 		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
 		boolean today = now.get(Calendar.DATE) == nextAlert.get(Calendar.DATE);
 		Toast.makeText(this, "Next Chicken Alert is at " + timeFormat.format(nextAlert.getTime()) + (today ? "" : " tomorrow"),
@@ -56,6 +62,12 @@ public class MainActivity extends Activity {
 	
 	private void disableAlerts() {
 		Log.i(getClass().getSimpleName(), "Disabling alerts");
+		
+		SharedPreferences prefs = getSharedPreferences("com.tom_e_white.chickenalerts", Context.MODE_PRIVATE);
+		Editor editor = prefs.edit();
+		editor.putBoolean("enabled", false);
+		editor.commit();
+		
 		Intent intent = new Intent(this, ChickenAlertReceiver.class);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(
 				this.getApplicationContext(), 0, intent, 0);

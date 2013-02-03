@@ -29,6 +29,9 @@ public class ChickenAlertReceiver extends BroadcastReceiver {
 	            mp.release();                
 	        }
 	    });
+		
+		AlertScheduler scheduler = new AlertScheduler();
+		scheduler.scheduleNextAlert(context);
 	}
 
 }
