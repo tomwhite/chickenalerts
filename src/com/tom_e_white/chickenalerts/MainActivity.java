@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Switch;
@@ -20,13 +19,10 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-		// TODO: get state from prefs and populate controls
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
@@ -41,16 +37,14 @@ public class MainActivity extends Activity {
 	}
 
 	private void enableAlerts() {
-		Log.i(getClass().getSimpleName(), "Enabling alerts");
-		SharedPreferences prefs = getSharedPreferences("com.tom_e_white.chickenalerts", Context.MODE_PRIVATE);
-		Editor editor = prefs.edit();
-		editor.putBoolean("enabled", true);
-		editor.commit();
-		
+		saveSettings(true);
+
+		// Schedule next alert
 		Calendar now = Calendar.getInstance();
 		AlertScheduler scheduler = new AlertScheduler();
 		Calendar nextAlert = scheduler.scheduleNextAlert(getApplicationContext(), now);
 		
+		// Tell user when next alert was scheduled for
 		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
 		boolean today = now.get(Calendar.DATE) == nextAlert.get(Calendar.DATE);
 		String text = getString(today ? R.string.next_alert_today : R.string.next_alert_tomorrow,
@@ -59,15 +53,17 @@ public class MainActivity extends Activity {
 	}
 	
 	private void disableAlerts() {
-		Log.i(getClass().getSimpleName(), "Disabling alerts");
+		saveSettings(false);
 		
-		SharedPreferences prefs = getSharedPreferences("com.tom_e_white.chickenalerts", Context.MODE_PRIVATE);
-		Editor editor = prefs.edit();
-		editor.putBoolean("enabled", false);
-		editor.commit();
-		
+		// Cancel next alert
 		AlertScheduler scheduler = new AlertScheduler();
-		scheduler.cancelNextAlert(getApplicationContext());
+		scheduler.cancelNextAlert(getApplicationContext());		
 	}
 
+	private void saveSettings(boolean on) {
+		SharedPreferences prefs = getSharedPreferences("com.tom_e_white.chickenalerts", Context.MODE_PRIVATE);
+		Editor editor = prefs.edit();
+		editor.putBoolean("enabled", on);
+		editor.commit();	
+	}
 }

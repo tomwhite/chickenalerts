@@ -19,7 +19,8 @@ public class AlertReceiver extends BroadcastReceiver {
 				.setTicker(context.getString(R.string.notification_text))
 				.setSound(sound)
 				.setAutoCancel(true)
-				.setSmallIcon(R.drawable.ic_launcher).build();
+				.setSmallIcon(R.drawable.ic_launcher)
+				.build();
 		NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.notify(0, notification);
