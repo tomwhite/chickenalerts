@@ -4,17 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <Switch android:text="Alerts"
+    <Switch android:text="@string/alerts_enabled"
                 android:checked="false"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dip"
                 android:onClick="onToggleClicked"/>
     
-    <Button
+    <Button android:text="@string/send_test_alert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="testAlert"
-        android:text="Send a test alert" >
-    </Button>
+        android:onClick="testAlert"/>
 </LinearLayout> 

@@ -34,7 +34,7 @@ public class AlertScheduler {
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(
 				context, 0, intent, 0);
 		Calendar nextAlert = Calendar.getInstance();
-		nextAlert.add(Calendar.SECOND, 5);
+		nextAlert.add(Calendar.SECOND, 2);
 		AlarmManager alarmManager =
 				(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC, nextAlert.getTimeInMillis(), pendingIntent);
