@@ -35,6 +35,11 @@ public class MainActivity extends Activity {
 	    	disableAlerts();
 	    }
 	}
+	
+	public void testAlert(View view) {
+		AlertScheduler scheduler = new AlertScheduler();
+		scheduler.scheduleTestAlert(getApplicationContext());		
+	}
 
 	private void enableAlerts() {
 		saveSettings(true);

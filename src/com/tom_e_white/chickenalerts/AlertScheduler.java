@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 
 public class AlertScheduler {
+	
+	public static final String TEST_ALERT = "testAlert";
 
 	public Calendar scheduleNextAlert(Context context) {
 		return scheduleNextAlert(context, Calendar.getInstance());
@@ -22,6 +24,19 @@ public class AlertScheduler {
 		AlarmManager alarmManager =
 				(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		// Don't wake device if asleep - wait until it is next turned on
+		alarmManager.set(AlarmManager.RTC, nextAlert.getTimeInMillis(), pendingIntent);
+		return nextAlert;
+	}
+
+	public Calendar scheduleTestAlert(Context context) {
+		Intent intent = new Intent(context, AlertReceiver.class);
+		intent.putExtra(TEST_ALERT, true);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(
+				context, 0, intent, 0);
+		Calendar nextAlert = Calendar.getInstance();
+		nextAlert.add(Calendar.SECOND, 5);
+		AlarmManager alarmManager =
+				(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC, nextAlert.getTimeInMillis(), pendingIntent);
 		return nextAlert;
 	}

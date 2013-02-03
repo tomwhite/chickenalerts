@@ -19,15 +19,17 @@ public class AlertReceiver extends BroadcastReceiver {
 				.setTicker(context.getString(R.string.notification_text))
 				.setSound(sound)
 				.setAutoCancel(true)
-				.setSmallIcon(R.drawable.ic_launcher)
+				.setSmallIcon(R.drawable.ic_stat_chicken)
 				.build();
 		NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.notify(0, notification);
 		
-		// Schedule next alert
-		AlertScheduler scheduler = new AlertScheduler();
-		scheduler.scheduleNextAlert(context);
+		// Schedule next alert (if not a test)
+		if (!intent.getBooleanExtra(AlertScheduler.TEST_ALERT, false)) {
+			AlertScheduler scheduler = new AlertScheduler();
+			scheduler.scheduleNextAlert(context);
+		}
 	}
 
 }

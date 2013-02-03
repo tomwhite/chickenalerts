@@ -10,4 +10,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="32dip"
                 android:onClick="onToggleClicked"/>
+    
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="testAlert"
+        android:text="Send a test alert" >
+    </Button>
 </LinearLayout> 

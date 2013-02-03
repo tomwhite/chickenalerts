@@ -28,13 +28,6 @@ public class AlertTimeCalculator {
 			alertTime = calculator.getOfficialSunsetCalendarForDate(calCopy);
 			alertTime.add(Calendar.MINUTE, offsetInMinutes);
 		}
-		
-		// TODO: remove - this is for testing
-		Calendar calCopy = Calendar.getInstance(cal.getTimeZone());
-		calCopy.setTime(cal.getTime());
-		calCopy.add(Calendar.SECOND, 10);	
-		return calCopy;
-//		
-//		return alertTime;
+		return alertTime;
 	}
 }
