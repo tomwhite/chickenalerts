@@ -4,10 +4,7 @@ import java.text.DateFormat;
 import java.util.Calendar;
 
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
@@ -69,11 +66,8 @@ public class MainActivity extends Activity {
 		editor.putBoolean("enabled", false);
 		editor.commit();
 		
-		Intent intent = new Intent(this, AlertReceiver.class);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(
-				this.getApplicationContext(), 0, intent, 0);
-		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-		alarmManager.cancel(pendingIntent);
+		AlertScheduler scheduler = new AlertScheduler();
+		scheduler.cancelNextAlert(getApplicationContext());
 	}
 
 }

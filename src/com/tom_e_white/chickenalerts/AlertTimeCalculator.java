@@ -16,7 +16,8 @@ public class AlertTimeCalculator {
 	 * @return
 	 */
 	public Calendar calculateNextAlert(Calendar cal) {
-		SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location, cal.getTimeZone());
+		SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location,
+				cal.getTimeZone());
 		Calendar alertTime = calculator.getOfficialSunsetCalendarForDate(cal);
 		alertTime.add(Calendar.MINUTE, offsetInMinutes);
 		if (!alertTime.after(cal)) {
@@ -30,7 +31,7 @@ public class AlertTimeCalculator {
 		// TODO: remove - this is for testing
 		Calendar calCopy = Calendar.getInstance(cal.getTimeZone());
 		calCopy.setTime(cal.getTime());
-		calCopy.add(Calendar.SECOND, 5);	
+		calCopy.add(Calendar.SECOND, 10);	
 		return calCopy;
 //		
 //		return alertTime;
