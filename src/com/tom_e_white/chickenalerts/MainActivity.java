@@ -56,8 +56,9 @@ public class MainActivity extends Activity {
 		
 		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
 		boolean today = now.get(Calendar.DATE) == nextAlert.get(Calendar.DATE);
-		Toast.makeText(this, "Next Chicken Alert is at " + timeFormat.format(nextAlert.getTime()) + (today ? "" : " tomorrow"),
-				Toast.LENGTH_LONG).show();
+		String text = getString(today ? R.string.next_alert_today : R.string.next_alert_tomorrow,
+				timeFormat.format(nextAlert.getTime()));
+		Toast.makeText(this, text, Toast.LENGTH_LONG).show();
 	}
 	
 	private void disableAlerts() {
@@ -68,7 +69,7 @@ public class MainActivity extends Activity {
 		editor.putBoolean("enabled", false);
 		editor.commit();
 		
-		Intent intent = new Intent(this, ChickenAlertReceiver.class);
+		Intent intent = new Intent(this, AlertReceiver.class);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(
 				this.getApplicationContext(), 0, intent, 0);
 		AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
