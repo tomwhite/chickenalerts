@@ -4,9 +4,7 @@ import java.text.DateFormat;
 import java.util.Calendar;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.view.View;
@@ -42,8 +40,6 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 	}
 
 	private void enableAlerts() {
-		saveSettings(true);
-
 		// Schedule next alert
 		Calendar now = Calendar.getInstance();
 		AlertScheduler scheduler = new AlertScheduler();
@@ -58,18 +54,9 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 	}
 	
 	private void disableAlerts() {
-		saveSettings(false);
-		
 		// Cancel next alert
 		AlertScheduler scheduler = new AlertScheduler();
 		scheduler.cancelNextAlert(getApplicationContext());		
-	}
-
-	private void saveSettings(boolean on) {
-		SharedPreferences prefs = getSharedPreferences("com.tom_e_white.chickenalerts", Context.MODE_PRIVATE);
-		Editor editor = prefs.edit();
-		editor.putBoolean("enabled", on);
-		editor.commit();	
 	}
 
 	@Override
