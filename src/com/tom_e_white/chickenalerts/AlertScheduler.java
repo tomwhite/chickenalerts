@@ -10,17 +10,19 @@ import android.content.Intent;
 public class AlertScheduler {
 	
 	public static final String TEST_ALERT = "testAlert";
+	public static final String DELAY = "delay";
 
-	public Calendar scheduleNextAlert(Context context) {
-		return scheduleNextAlert(context, Calendar.getInstance());
+	public Calendar scheduleNextAlert(Context context, int delay) {
+		return scheduleNextAlert(context, delay, Calendar.getInstance());
 	}
 	
-	public Calendar scheduleNextAlert(Context context, Calendar cal) {
+	public Calendar scheduleNextAlert(Context context, int delay, Calendar cal) {
 		Intent intent = new Intent(context, AlertReceiver.class);
+		intent.putExtra(DELAY, delay);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(
 				context, 0, intent, 0);
 		AlertTimeCalculator calculator = new AlertTimeCalculator();
-		Calendar nextAlert = calculator.calculateNextAlert(cal);
+		Calendar nextAlert = calculator.calculateNextAlert(cal, delay);
 		AlarmManager alarmManager =
 				(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		// Don't wake device if asleep - wait until it is next turned on

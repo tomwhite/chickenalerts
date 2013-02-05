@@ -12,6 +12,10 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
 	
+	public static final int DEFAULT_DELAY = 45;
+	
+	private static final String PREF_ENABLED = "pref_enabled";
+	private static final String PREF_DELAY = "pref_delay";
 	private SettingsFragment fragment;
 
 	@Override
@@ -39,11 +43,11 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		scheduler.scheduleTestAlert(getApplicationContext());		
 	}
 
-	private void enableAlerts() {
+	private void enableAlerts(int delay) {
 		// Schedule next alert
 		Calendar now = Calendar.getInstance();
 		AlertScheduler scheduler = new AlertScheduler();
-		Calendar nextAlert = scheduler.scheduleNextAlert(getApplicationContext(), now);
+		Calendar nextAlert = scheduler.scheduleNextAlert(getApplicationContext(), delay, now);
 		
 		// Tell user when next alert was scheduled for
 		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
@@ -62,17 +66,35 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		if (key.equals("pref_enabled")) {
+		if (key.equals(PREF_ENABLED)) {
 			Preference pref = fragment.findPreference(key);
-			boolean on = sharedPreferences.getBoolean("pref_enabled", false);
+			boolean on = sharedPreferences.getBoolean(PREF_ENABLED, false);
 		    if (on) {
 		    	pref.setSummary(getString(R.string.pref_enabled));
-		    	enableAlerts();
+				int delay = getDelay(sharedPreferences);
+		    	enableAlerts(delay);
 		    } else {
 		    	pref.setSummary(getString(R.string.pref_disabled));
 		    	disableAlerts();
 		    }
+		} else if (key.equals(PREF_DELAY)) {
+			Preference pref = fragment.findPreference(key);
+			int delay = getDelay(sharedPreferences);
+			pref.setSummary(getString(R.string.pref_delay_summary_param, delay));
+	    	disableAlerts();
+	    	enableAlerts(delay);
 		}
-		
 	}
+	
+	private int getDelay(SharedPreferences sharedPreferences) {
+		String delayString = sharedPreferences.getString(PREF_DELAY, DEFAULT_DELAY + "");
+		int delay = DEFAULT_DELAY;
+		try {
+			delay = Integer.parseInt(delayString.trim());
+		} catch (NumberFormatException e) {
+			// set to default
+		}
+		return delay;
+	}
+	
 }

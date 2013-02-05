@@ -8,14 +8,13 @@ import com.luckycatlabs.sunrisesunset.dto.Location;
 public class AlertTimeCalculator {
 	
 	private Location location = new Location("51.868383", "-3.151789"); // Crickhowell
-	private int offsetInMinutes = 45;
 
 	/**
 	 * Calculate the time of the next alert after {@link cal}. 
 	 * @param cal
 	 * @return
 	 */
-	public Calendar calculateNextAlert(Calendar cal) {
+	public Calendar calculateNextAlert(Calendar cal, int offsetInMinutes) {
 		SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location,
 				cal.getTimeZone());
 		Calendar alertTime = calculator.getOfficialSunsetCalendarForDate(cal);

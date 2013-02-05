@@ -28,7 +28,8 @@ public class AlertReceiver extends BroadcastReceiver {
 		// Schedule next alert (if not a test)
 		if (!intent.getBooleanExtra(AlertScheduler.TEST_ALERT, false)) {
 			AlertScheduler scheduler = new AlertScheduler();
-			scheduler.scheduleNextAlert(context);
+			int delay = intent.getIntExtra(AlertScheduler.DELAY, MainActivity.DEFAULT_DELAY);
+			scheduler.scheduleNextAlert(context, delay);
 		}
 	}
 

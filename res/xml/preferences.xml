@@ -3,6 +3,11 @@
     <CheckBoxPreference
         android:key="pref_enabled"
         android:title="@string/pref_enable"
-        android:summary="@string/pref_enabled"
+        android:summary="@string/pref_disabled"
         android:defaultValue="false" />
+    <EditTextPreference android:key="pref_delay"
+        android:title="@string/pref_delay"
+        android:summary="@string/pref_delay_summary"
+        android:defaultValue="@string/pref_delay_default"
+        android:inputType="number"/>
 </PreferenceScreen>

@@ -6,7 +6,11 @@
     <string name="pref_enable">Enable</string>
     <string name="pref_enabled">Enabled: chicken alerts will be sent</string>
     <string name="pref_disabled">Disabled: chicken alerts will not be sent</string>
-    <string name="send_test_alert">Send a test alert</string>
+    <string name="pref_delay">Delay</string>
+    <string name="pref_delay_summary">Alert 45 minutes after sunset</string>
+    <string name="pref_delay_summary_param">Alert %1$s minutes after sunset</string>
+    <string name="pref_delay_default">45</string>
+    <string name="send_test_alert">Send a test alert now</string>
     <string name="notification_title">Chicken Alert</string>
     <string name="notification_text">Have you put the chickens to bed?</string>
     <string name="next_alert_today">Next Chicken Alert is at %1$s</string>
