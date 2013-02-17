@@ -29,6 +29,7 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		super.onResume();
 		fragment = (SettingsFragment) getFragmentManager().findFragmentById(R.id.frag);
 		fragment.getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+		setSummaries(fragment.getPreferenceScreen().getSharedPreferences());
 	}
 	
 	@Override
@@ -83,6 +84,23 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 			pref.setSummary(getString(R.string.pref_delay_summary_param, delay));
 	    	disableAlerts();
 	    	enableAlerts(delay);
+		}
+	}
+	
+	private void setSummaries(SharedPreferences sharedPreferences) {
+		{
+			Preference pref = fragment.findPreference(PREF_ENABLED);
+			boolean on = sharedPreferences.getBoolean(PREF_ENABLED, false);
+		    if (on) {
+		    	pref.setSummary(getString(R.string.pref_enabled));
+		    } else {
+		    	pref.setSummary(getString(R.string.pref_disabled));
+		    }
+		}
+		{
+			Preference pref = fragment.findPreference(PREF_DELAY);
+			int delay = getDelay(sharedPreferences);
+			pref.setSummary(getString(R.string.pref_delay_summary_param, delay));			
 		}
 	}
 	
