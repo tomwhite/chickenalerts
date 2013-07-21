@@ -17,7 +17,11 @@ public class AlertReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		if (BuildConfig.DEBUG)
 			Log.i(TAG, "AlertReceiver received " + intent.getAction());
-				
+
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+		if (BuildConfig.DEBUG)
+			Log.i(TAG, "sharedPreferences " + sharedPreferences.getAll());
+		
 		if (!"android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
 			// Issue the notification
 			if (BuildConfig.DEBUG)
@@ -37,11 +41,14 @@ public class AlertReceiver extends BroadcastReceiver {
 			notificationManager.notify(0, notification);
 		}
 		
-		// Schedule next alert (if not a test)
-		if (!intent.getBooleanExtra(AlertScheduler.TEST_ALERT, false)) {
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-			if (BuildConfig.DEBUG)
-				Log.i(TAG, "sharedPreferences " + sharedPreferences.getAll());
+		// Schedule next alert (if not a test and enabled)
+		boolean test = intent.getBooleanExtra(AlertScheduler.TEST_ALERT, false);
+		boolean enabled = sharedPreferences.getBoolean(PREF_ENABLED, false);
+		if (BuildConfig.DEBUG) {
+			Log.i(TAG, "test " + test);
+			Log.i(TAG, "enabled " + enabled);
+		}
+		if (!test && enabled) {
 			AlertScheduler scheduler = new AlertScheduler();
 			scheduler.scheduleNextAlert(context, MainActivity.getDelay(sharedPreferences));
 		}

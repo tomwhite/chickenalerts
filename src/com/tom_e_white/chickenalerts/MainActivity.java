@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Toast;
 
@@ -53,13 +54,17 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		boolean today = now.get(Calendar.DATE) == nextAlert.get(Calendar.DATE);
 		String text = getString(today ? R.string.next_alert_today : R.string.next_alert_tomorrow,
 				timeFormat.format(nextAlert.getTime()));
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		sharedPreferences.edit().putString(PREF_NEXT_ALERT, text).apply();
 		Toast.makeText(this, text, Toast.LENGTH_LONG).show();
 	}
 	
 	private void disableAlerts() {
 		// Cancel next alert
 		AlertScheduler scheduler = new AlertScheduler();
-		scheduler.cancelNextAlert(getApplicationContext());		
+		scheduler.cancelNextAlert(getApplicationContext());
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		sharedPreferences.edit().remove(PREF_NEXT_ALERT).apply();
 	}
 
 	@Override
