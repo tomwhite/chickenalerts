@@ -1,5 +1,7 @@
 package com.tom_e_white.chickenalerts;
 
+import static com.tom_e_white.chickenalerts.ChickenConstants.*;
+
 import java.text.DateFormat;
 import java.util.Calendar;
 
@@ -12,10 +14,6 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
 	
-	public static final int DEFAULT_DELAY = 45;
-	
-	private static final String PREF_ENABLED = "pref_enabled";
-	private static final String PREF_DELAY = "pref_delay";
 	private SettingsFragment fragment;
 
 	@Override
@@ -104,7 +102,7 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		}
 	}
 	
-	private int getDelay(SharedPreferences sharedPreferences) {
+	public static int getDelay(SharedPreferences sharedPreferences) {
 		String delayString = sharedPreferences.getString(PREF_DELAY, DEFAULT_DELAY + "");
 		int delay = DEFAULT_DELAY;
 		try {

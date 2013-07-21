@@ -1,23 +1,27 @@
 package com.tom_e_white.chickenalerts;
 
+import static com.tom_e_white.chickenalerts.ChickenConstants.*;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class AlertReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (BuildConfig.DEBUG)
-			Log.i(ChickenConstants.TAG, "AlertReceiver received " + intent.getAction());
-		
+			Log.i(TAG, "AlertReceiver received " + intent.getAction());
+				
 		if (!"android.intent.action.BOOT_COMPLETED".equals(intent.getAction())) {
 			// Issue the notification
 			if (BuildConfig.DEBUG)
-				Log.i(ChickenConstants.TAG, "Have you put the chickens to bed?");
+				Log.i(TAG, "Have you put the chickens to bed?");
 			Uri sound = Uri.parse("android.resource://" + context.getPackageName()
 					+ "/" + R.raw.cluck);
 			Notification notification = new Notification.Builder(context)
@@ -35,9 +39,11 @@ public class AlertReceiver extends BroadcastReceiver {
 		
 		// Schedule next alert (if not a test)
 		if (!intent.getBooleanExtra(AlertScheduler.TEST_ALERT, false)) {
+			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+			if (BuildConfig.DEBUG)
+				Log.i(TAG, "sharedPreferences " + sharedPreferences.getAll());
 			AlertScheduler scheduler = new AlertScheduler();
-			int delay = intent.getIntExtra(AlertScheduler.DELAY, MainActivity.DEFAULT_DELAY);
-			scheduler.scheduleNextAlert(context, delay);
+			scheduler.scheduleNextAlert(context, MainActivity.getDelay(sharedPreferences));
 		}
 	}
 
