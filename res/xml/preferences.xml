@@ -5,6 +5,14 @@
         android:title="@string/pref_enable"
         android:summary="@string/pref_disabled"
         android:defaultValue="false" />
+    <ListPreference
+        android:key="pref_sunset"
+        android:title="@string/pref_sunset"
+        android:summary="@string/pref_sunset_summary"
+        android:dialogTitle="@string/pref_sunset"
+        android:entries="@array/pref_sunset_entries"
+        android:entryValues="@array/pref_sunset_values"
+        android:defaultValue="@string/pref_sunset_default" />
     <EditTextPreference android:key="pref_delay"
         android:title="@string/pref_delay"
         android:summary="@string/pref_delay_summary"

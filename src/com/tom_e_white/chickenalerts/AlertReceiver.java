@@ -50,7 +50,7 @@ public class AlertReceiver extends BroadcastReceiver {
 		}
 		if (!test && enabled) {
 			AlertScheduler scheduler = new AlertScheduler();
-			scheduler.scheduleNextAlert(context, MainActivity.getDelay(sharedPreferences));
+			scheduler.scheduleNextAlert(context, MainActivity.getSunsetDefinition(sharedPreferences), MainActivity.getDelay(sharedPreferences));
 		}
 	}
 

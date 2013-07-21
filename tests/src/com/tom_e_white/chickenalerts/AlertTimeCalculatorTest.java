@@ -17,7 +17,7 @@ public class AlertTimeCalculatorTest extends TestCase {
 		cal.set(Calendar.SECOND, 0);
 		
 		AlertTimeCalculator calculator = new AlertTimeCalculator();
-		Calendar nextAlert = calculator.calculateNextAlert(cal, 45);
+		Calendar nextAlert = calculator.calculateNextAlert(cal, SunsetDefinition.OFFICIAL, 45);
 		
 		assertEquals(nextAlert.get(Calendar.YEAR), 2013);
 		assertEquals(nextAlert.get(Calendar.MONTH), Calendar.FEBRUARY);
@@ -36,7 +36,7 @@ public class AlertTimeCalculatorTest extends TestCase {
 		cal.set(Calendar.SECOND, 0);
 		
 		AlertTimeCalculator calculator = new AlertTimeCalculator();
-		Calendar nextAlert = calculator.calculateNextAlert(cal, 45);
+		Calendar nextAlert = calculator.calculateNextAlert(cal, SunsetDefinition.OFFICIAL, 45);
 		
 		assertEquals(nextAlert.get(Calendar.YEAR), 2013);
 		assertEquals(nextAlert.get(Calendar.MONTH), Calendar.FEBRUARY);

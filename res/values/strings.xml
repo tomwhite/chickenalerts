@@ -6,10 +6,21 @@
     <string name="pref_enable">Enable</string>
     <string name="pref_enabled">Enabled: chicken alerts will be sent</string>
     <string name="pref_disabled">Disabled: chicken alerts will not be sent</string>
+    <string name="pref_sunset">Sunset definition</string>
+    <string name="pref_sunset_summary">Civil</string>
+    <string-array name="pref_sunset_entries">
+        <item>Official (0&#xb0; below horizon)</item>
+        <item>Civil (6&#xb0; below horizon)</item>
+    </string-array>
+    <string-array name="pref_sunset_values">
+        <item>official</item>
+        <item>civil</item>
+    </string-array>
+    <string name="pref_sunset_default">civil</string>
     <string name="pref_delay">Delay</string>
-    <string name="pref_delay_summary">Alert 45 minutes after sunset</string>
+    <string name="pref_delay_summary">Alert 5 minutes after sunset</string>
     <string name="pref_delay_summary_param">Alert %1$s minutes after sunset</string>
-    <string name="pref_delay_default">45</string>
+    <string name="pref_delay_default">5</string>
     <string name="send_test_alert">Send a test alert now</string>
     <string name="notification_title">Chicken Alert</string>
     <string name="notification_text">Have you put the chickens to bed?</string>

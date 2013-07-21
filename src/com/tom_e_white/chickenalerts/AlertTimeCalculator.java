@@ -14,19 +14,29 @@ public class AlertTimeCalculator {
 	 * @param cal
 	 * @return
 	 */
-	public Calendar calculateNextAlert(Calendar cal, int offsetInMinutes) {
+	public Calendar calculateNextAlert(Calendar cal, SunsetDefinition sunsetDefinition, int offsetInMinutes) {
 		SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location,
 				cal.getTimeZone());
-		Calendar alertTime = calculator.getOfficialSunsetCalendarForDate(cal);
+		Calendar alertTime = getSunsetCalendar(cal, sunsetDefinition, calculator);
 		alertTime.add(Calendar.MINUTE, offsetInMinutes);
 		// advance a day if alert time has already passed for today
 		if (!alertTime.after(cal)) {
 			Calendar calCopy = Calendar.getInstance(cal.getTimeZone());
 			calCopy.setTime(cal.getTime());
 			calCopy.add(Calendar.DATE, 1);
-			alertTime = calculator.getOfficialSunsetCalendarForDate(calCopy);
+			alertTime = getSunsetCalendar(calCopy, sunsetDefinition, calculator);
 			alertTime.add(Calendar.MINUTE, offsetInMinutes);
 		}
 		return alertTime;
+	}
+	
+	private Calendar getSunsetCalendar(Calendar cal, SunsetDefinition sunsetDefinition, SunriseSunsetCalculator calculator) {
+		switch (sunsetDefinition) {
+		case OFFICIAL:
+			return calculator.getOfficialSunsetCalendarForDate(cal);
+		case CIVIL:
+		default:
+			return calculator.getCivilSunsetCalendarForDate(cal);
+		}		
 	}
 }

@@ -4,12 +4,15 @@ import static com.tom_e_white.chickenalerts.ChickenConstants.*;
 
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -43,18 +46,23 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		scheduler.scheduleTestAlert(getApplicationContext());		
 	}
 
-	private void enableAlerts(int delay) {
+	private void enableAlerts() {
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		SunsetDefinition sunsetDefinition = getSunsetDefinition(sharedPreferences);
+		if (BuildConfig.DEBUG)
+			Log.i(TAG, "Sunset definition: " + sunsetDefinition);
+		int delay = getDelay(sharedPreferences);
+		
 		// Schedule next alert
 		Calendar now = Calendar.getInstance();
 		AlertScheduler scheduler = new AlertScheduler();
-		Calendar nextAlert = scheduler.scheduleNextAlert(getApplicationContext(), delay, now);
+		Calendar nextAlert = scheduler.scheduleNextAlert(getApplicationContext(), sunsetDefinition, delay, now);
 		
 		// Tell user when next alert was scheduled for
 		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
 		boolean today = now.get(Calendar.DATE) == nextAlert.get(Calendar.DATE);
 		String text = getString(today ? R.string.next_alert_today : R.string.next_alert_tomorrow,
 				timeFormat.format(nextAlert.getTime()));
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		sharedPreferences.edit().putString(PREF_NEXT_ALERT, text).apply();
 		Toast.makeText(this, text, Toast.LENGTH_LONG).show();
 	}
@@ -75,18 +83,23 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 			boolean on = sharedPreferences.getBoolean(PREF_ENABLED, false);
 		    if (on) {
 		    	pref.setSummary(getString(R.string.pref_enabled));
-				int delay = getDelay(sharedPreferences);
-		    	enableAlerts(delay);
+		    	enableAlerts();
 		    } else {
 		    	pref.setSummary(getString(R.string.pref_disabled));
 		    	disableAlerts();
 		    }
+		} else if (key.equals(PREF_SUNSET)) {
+			ListPreference pref = (ListPreference) fragment.findPreference(key);
+			String sunsetDefinition = sharedPreferences.getString(PREF_SUNSET, DEFAULT_SUNSET);
+			pref.setSummary(pref.getEntries()[pref.findIndexOfValue(sunsetDefinition)]);
+	    	disableAlerts();
+	    	enableAlerts();		
 		} else if (key.equals(PREF_DELAY)) {
 			Preference pref = fragment.findPreference(key);
 			int delay = getDelay(sharedPreferences);
 			pref.setSummary(getString(R.string.pref_delay_summary_param, delay));
 	    	disableAlerts();
-	    	enableAlerts(delay);
+	    	enableAlerts();
 		}
 	}
 	
@@ -101,10 +114,19 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		    }
 		}
 		{
+			ListPreference pref = (ListPreference) fragment.findPreference(PREF_SUNSET);
+			String sunsetDefinition = sharedPreferences.getString(PREF_SUNSET, DEFAULT_SUNSET);
+			pref.setSummary(pref.getEntries()[pref.findIndexOfValue(sunsetDefinition)]);
+		}
+		{
 			Preference pref = fragment.findPreference(PREF_DELAY);
 			int delay = getDelay(sharedPreferences);
 			pref.setSummary(getString(R.string.pref_delay_summary_param, delay));			
 		}
+	}
+	
+	public static SunsetDefinition getSunsetDefinition(SharedPreferences sharedPreferences) {
+		return SunsetDefinition.valueOf(sharedPreferences.getString(PREF_SUNSET, DEFAULT_SUNSET).toUpperCase(Locale.ENGLISH));
 	}
 	
 	public static int getDelay(SharedPreferences sharedPreferences) {
