@@ -1,11 +1,13 @@
 package com.tom_e_white.chickenalerts;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class AlertScheduler {
 	
@@ -27,6 +29,8 @@ public class AlertScheduler {
 				(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		// Don't wake device if asleep - wait until it is next turned on
 		alarmManager.set(AlarmManager.RTC, nextAlert.getTimeInMillis(), pendingIntent);
+		if (BuildConfig.DEBUG)
+			Log.i(ChickenConstants.TAG, "Next chicken alert set for " + DateFormat.getTimeInstance(DateFormat.SHORT).format(nextAlert.getTime()));
 		return nextAlert;
 	}
 
@@ -40,6 +44,8 @@ public class AlertScheduler {
 		AlarmManager alarmManager =
 				(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		alarmManager.set(AlarmManager.RTC, nextAlert.getTimeInMillis(), pendingIntent);
+		if (BuildConfig.DEBUG)
+			Log.i(ChickenConstants.TAG, "Test chicken alert set for " + DateFormat.getTimeInstance(DateFormat.SHORT).format(nextAlert.getTime()));
 		return nextAlert;
 	}
 	
