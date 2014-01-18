@@ -52,11 +52,12 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		if (BuildConfig.DEBUG)
 			Log.i(TAG, "Sunset definition: " + sunsetDefinition);
 		int delay = getDelay(sharedPreferences);
+		String location = getLocation(sharedPreferences);
 		
 		// Schedule next alert
 		Calendar now = Calendar.getInstance();
 		AlertScheduler scheduler = new AlertScheduler();
-		Calendar nextAlert = scheduler.scheduleNextAlert(getApplicationContext(), sunsetDefinition, delay, now);
+		Calendar nextAlert = scheduler.scheduleNextAlert(getApplicationContext(), sunsetDefinition, delay, location, now);
 		
 		// Tell user when next alert was scheduled for
 		DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
@@ -100,6 +101,12 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 			pref.setSummary(getString(R.string.pref_delay_summary_param, delay));
 	    	disableAlerts();
 	    	enableAlerts();
+		} else if (key.equals(PREF_LOCATION)) {
+			Preference pref = fragment.findPreference(PREF_LOCATION);
+			String location = getLocation(sharedPreferences);
+			pref.setSummary(location);			
+	    	disableAlerts();
+	    	enableAlerts();
 		}
 	}
 	
@@ -123,6 +130,11 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 			int delay = getDelay(sharedPreferences);
 			pref.setSummary(getString(R.string.pref_delay_summary_param, delay));			
 		}
+		{
+			Preference pref = fragment.findPreference(PREF_LOCATION);
+			String location = getLocation(sharedPreferences);
+			pref.setSummary(location);			
+		}
 	}
 	
 	public static SunsetDefinition getSunsetDefinition(SharedPreferences sharedPreferences) {
@@ -139,5 +151,9 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		}
 		return delay;
 	}
-	
+
+	public static String getLocation(SharedPreferences sharedPreferences) {
+		return sharedPreferences.getString(PREF_LOCATION, DEFAULT_LOCATION);
+	}
+
 }

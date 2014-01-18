@@ -17,5 +17,14 @@
         android:title="@string/pref_delay"
         android:summary="@string/pref_delay_summary"
         android:defaultValue="@string/pref_delay_default"
-        android:inputType="number"/>
+        android:inputType="numberSigned"/>
+    <EditTextPreference android:key="pref_location"
+        android:title="@string/pref_location"
+        android:summary="@string/pref_location_summary"
+        android:defaultValue="@string/pref_location_default"
+        android:inputType="text"
+        android:clickable="false" 
+        android:cursorVisible="false" 
+        android:focusable="false" 
+        android:focusableInTouchMode="false"/>
 </PreferenceScreen>
