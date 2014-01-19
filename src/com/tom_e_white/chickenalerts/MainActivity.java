@@ -36,7 +36,7 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		updateLocationButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference pref) {
-    			String newLocationString = "51.4791,0.0003"; // TODO: get from location client
+    			String newLocationString = LocationUtil.toLocationString(51.4791, 0); // TODO: get from location client
     			Preference locationPref = fragment.findPreference(PREF_LOCATION);
     			locationPref.setSummary(newLocationString);
     			locationPref.getEditor().putString(PREF_LOCATION, newLocationString).apply();
