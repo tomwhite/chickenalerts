@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -15,14 +16,54 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
+import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailedListener;
+import com.google.android.gms.location.LocationClient;
+
 public class MainActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
 	
 	private SettingsFragment fragment;
+	private LocationClient locationClient;
+	private boolean locationClientConnected = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		locationClient = new LocationClient(this, new ConnectionCallbacks() {
+			@Override
+			public void onConnected(Bundle connectionHint) {
+				if (BuildConfig.DEBUG)
+					Log.i(TAG, "Location onConnected");
+				MainActivity.this.locationClientConnected = true;
+			}
+			@Override
+			public void onDisconnected() {
+				if (BuildConfig.DEBUG)
+					Log.i(TAG, "Location onDisconnected");
+				MainActivity.this.locationClientConnected = false;
+			}
+		}, new OnConnectionFailedListener() {
+			@Override
+			public void onConnectionFailed(ConnectionResult result) {
+				if (BuildConfig.DEBUG)
+					Log.i(TAG, "Location onConnectionFailed");
+				MainActivity.this.locationClientConnected = false;
+			}			
+		});
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		locationClient.connect();
+	}
+
+	@Override
+	protected void onStop() {
+		locationClient.disconnect();
+		super.onStop();
 	}
 
 	@Override
@@ -36,7 +77,16 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		updateLocationButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference pref) {
-    			String newLocationString = LocationUtil.toLocationString(51.4791, 0); // TODO: get from location client
+            	if (!MainActivity.this.locationClientConnected) {
+        			Toast.makeText(MainActivity.this, "Cannot find location", Toast.LENGTH_LONG).show();   
+        			return true;
+            	}
+            	Location location = locationClient.getLastLocation();
+            	if (location == null) {
+        			Toast.makeText(MainActivity.this, "Cannot find last location", Toast.LENGTH_LONG).show();   
+        			return true;            		
+            	}
+    			String newLocationString = LocationUtil.toLocationString(location);
     			Preference locationPref = fragment.findPreference(PREF_LOCATION);
     			locationPref.setSummary(newLocationString);
     			locationPref.getEditor().putString(PREF_LOCATION, newLocationString).apply();
