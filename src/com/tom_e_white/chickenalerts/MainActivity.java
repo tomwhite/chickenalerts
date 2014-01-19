@@ -31,8 +31,24 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		fragment = (SettingsFragment) getFragmentManager().findFragmentById(R.id.frag);
 		fragment.getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 		setSummaries(fragment.getPreferenceScreen().getSharedPreferences());
-		Preference button = (Preference) fragment.getPreferenceScreen().findPreference(ChickenConstants.TEST_BUTTON);
-		button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+		
+		Preference updateLocationButton = (Preference) fragment.getPreferenceScreen().findPreference(ChickenConstants.UPDATE_LOCATION_BUTTON);
+		updateLocationButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference pref) {
+    			String newLocationString = "51.4791,0.0003"; // TODO: get from location client
+    			Preference locationPref = fragment.findPreference(PREF_LOCATION);
+    			locationPref.setSummary(newLocationString);
+    			locationPref.getEditor().putString(PREF_LOCATION, newLocationString).apply();
+    			Toast.makeText(MainActivity.this, "Location set to " + newLocationString, Toast.LENGTH_LONG).show();
+    	    	disableAlerts();
+    	    	enableAlerts();
+                return true;
+            }
+        });
+
+		Preference testButton = (Preference) fragment.getPreferenceScreen().findPreference(ChickenConstants.TEST_BUTTON);
+		testButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(Preference pref) { 
         		AlertScheduler scheduler = new AlertScheduler();
@@ -40,6 +56,7 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
                 return true;
             }
         });
+
 	}
 	
 	@Override
@@ -50,10 +67,12 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 	}
 
 	private void enableAlerts() {
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		SunsetDefinition sunsetDefinition = getSunsetDefinition(sharedPreferences);
 		if (BuildConfig.DEBUG)
-			Log.i(TAG, "Sunset definition: " + sunsetDefinition);
+			Log.i(TAG, "enableAlerts");
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		if (BuildConfig.DEBUG)
+			Log.i(TAG, "sharedPreferences " + sharedPreferences.getAll());
+		SunsetDefinition sunsetDefinition = getSunsetDefinition(sharedPreferences);
 		int delay = getDelay(sharedPreferences);
 		String location = getLocation(sharedPreferences);
 		
@@ -72,6 +91,8 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 	}
 	
 	private void disableAlerts() {
+		if (BuildConfig.DEBUG)
+			Log.i(TAG, "disableAlerts");
 		// Cancel next alert
 		AlertScheduler scheduler = new AlertScheduler();
 		scheduler.cancelNextAlert(getApplicationContext());
