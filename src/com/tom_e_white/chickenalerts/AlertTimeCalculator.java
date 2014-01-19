@@ -6,18 +6,22 @@ import com.luckycatlabs.sunrisesunset.SunriseSunsetCalculator;
 import com.luckycatlabs.sunrisesunset.dto.Location;
 
 public class AlertTimeCalculator {
-	
+
 	/**
-	 * Calculate the time of the next alert after {@link cal}. 
+	 * Calculate the time of the next alert after {@link cal}.
+	 * 
 	 * @param cal
 	 * @return
 	 */
-	public Calendar calculateNextAlert(Calendar cal, SunsetDefinition sunsetDefinition, int offsetInMinutes, String locationString) {
+	public Calendar calculateNextAlert(Calendar cal,
+	        SunsetDefinition sunsetDefinition, int offsetInMinutes,
+	        String locationString) {
 		String[] parts = locationString.split(",");
 		Location location = new Location(parts[0], parts[1]);
-		SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(location,
-				cal.getTimeZone());
-		Calendar alertTime = getSunsetCalendar(cal, sunsetDefinition, calculator);
+		SunriseSunsetCalculator calculator = new SunriseSunsetCalculator(
+		        location, cal.getTimeZone());
+		Calendar alertTime = getSunsetCalendar(cal, sunsetDefinition,
+		        calculator);
 		alertTime.add(Calendar.MINUTE, offsetInMinutes);
 		// advance a day if alert time has already passed for today
 		if (!alertTime.after(cal)) {
@@ -29,14 +33,16 @@ public class AlertTimeCalculator {
 		}
 		return alertTime;
 	}
-	
-	private Calendar getSunsetCalendar(Calendar cal, SunsetDefinition sunsetDefinition, SunriseSunsetCalculator calculator) {
+
+	private Calendar getSunsetCalendar(Calendar cal,
+	        SunsetDefinition sunsetDefinition,
+	        SunriseSunsetCalculator calculator) {
 		switch (sunsetDefinition) {
 		case OFFICIAL:
 			return calculator.getOfficialSunsetCalendarForDate(cal);
 		case CIVIL:
 		default:
 			return calculator.getCivilSunsetCalendarForDate(cal);
-		}		
+		}
 	}
 }
