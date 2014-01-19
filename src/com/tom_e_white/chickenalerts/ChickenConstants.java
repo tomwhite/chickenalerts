@@ -15,6 +15,6 @@ public class ChickenConstants {
 
 	public static final String DEFAULT_SUNSET = "civil";	
 	public static final int DEFAULT_DELAY = 5;
-	public static final String DEFAULT_LOCATION = "51.868383,-3.151789"; // Brecon Beacons UK
+	public static final String DEFAULT_LOCATION = "51.4791,0.0000"; // Greenwich
 
 }

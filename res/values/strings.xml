@@ -22,8 +22,8 @@
     <string name="pref_delay_summary_param">Alert %1$s minutes after sunset</string>
     <string name="pref_delay_default">5</string>
     <string name="pref_location">Location</string>
-    <string name="pref_location_summary">51.868383,-3.151789</string>
-    <string name="pref_location_default">51.868383,-3.151789</string>
+    <string name="pref_location_summary">51.4791,0.0000</string>
+    <string name="pref_location_default">51.4791,0.0000</string>
     <string name="update_location">Use current location</string>
     <string name="send_test_alert">Send a test alert now</string>
     <string name="notification_title">Chicken Alert</string>
