@@ -27,4 +27,8 @@
         android:cursorVisible="false" 
         android:focusable="false" 
         android:focusableInTouchMode="false"/>
+    <Preference android:title="@string/update_location"
+        android:key="update_location_button"/>
+    <Preference android:title="@string/send_test_alert"
+        android:key="test_button"/>
 </PreferenceScreen>

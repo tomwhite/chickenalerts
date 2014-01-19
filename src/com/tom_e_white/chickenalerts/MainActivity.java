@@ -13,7 +13,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 public class MainActivity extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -32,6 +31,15 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		fragment = (SettingsFragment) getFragmentManager().findFragmentById(R.id.frag);
 		fragment.getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
 		setSummaries(fragment.getPreferenceScreen().getSharedPreferences());
+		Preference button = (Preference) fragment.getPreferenceScreen().findPreference(ChickenConstants.TEST_BUTTON);
+		button.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference pref) { 
+        		AlertScheduler scheduler = new AlertScheduler();
+        		scheduler.scheduleTestAlert(getApplicationContext());		
+                return true;
+            }
+        });
 	}
 	
 	@Override
@@ -39,11 +47,6 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		super.onPause();
 		fragment.getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
 		fragment = null;
-	}
-	
-	public void testAlert(View view) {
-		AlertScheduler scheduler = new AlertScheduler();
-		scheduler.scheduleTestAlert(getApplicationContext());		
 	}
 
 	private void enableAlerts() {
