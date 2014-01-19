@@ -41,8 +41,7 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
     			locationPref.setSummary(newLocationString);
     			locationPref.getEditor().putString(PREF_LOCATION, newLocationString).apply();
     			Toast.makeText(MainActivity.this, "Location set to " + newLocationString, Toast.LENGTH_LONG).show();
-    	    	disableAlerts();
-    	    	enableAlerts();
+    			updateAlertsIfNeeded();
                 return true;
             }
         });
@@ -99,6 +98,17 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		sharedPreferences.edit().remove(PREF_NEXT_ALERT).apply();
 	}
+	
+	private void updateAlertsIfNeeded() {
+		if (BuildConfig.DEBUG)
+			Log.i(TAG, "updateAlertsIfNeeded");
+		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean on = sharedPreferences.getBoolean(PREF_ENABLED, false);
+	    if (on) {
+	    	disableAlerts();
+	    	enableAlerts();
+	    }
+	}
 
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
@@ -117,20 +127,17 @@ public class MainActivity extends Activity implements SharedPreferences.OnShared
 			ListPreference pref = (ListPreference) fragment.findPreference(key);
 			String sunsetDefinition = sharedPreferences.getString(PREF_SUNSET, DEFAULT_SUNSET);
 			pref.setSummary(pref.getEntries()[pref.findIndexOfValue(sunsetDefinition)]);
-	    	disableAlerts();
-	    	enableAlerts();		
+			updateAlertsIfNeeded();
 		} else if (key.equals(PREF_DELAY)) {
 			Preference pref = fragment.findPreference(key);
 			int delay = getDelay(sharedPreferences);
 			pref.setSummary(getString(R.string.pref_delay_summary_param, delay));
-	    	disableAlerts();
-	    	enableAlerts();
+			updateAlertsIfNeeded();
 		} else if (key.equals(PREF_LOCATION)) {
 			Preference pref = fragment.findPreference(PREF_LOCATION);
 			String location = getLocation(sharedPreferences);
 			pref.setSummary(location);			
-	    	disableAlerts();
-	    	enableAlerts();
+			updateAlertsIfNeeded();
 		}
 	}
 	
